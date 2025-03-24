@@ -1,0 +1,64 @@
+<h2>Productos</h2>
+<hr>
+<div style="display: flex; gap: 20px;">
+    <!-- Lista de productos -->
+    <div style="flex: 1;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="background-color: #f4f4f4;">
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">Título</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">Precio</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">Descripción</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">Código</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">Stock</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each productos}}
+                <tr>
+                    <td style="padding: 5px; border-bottom: 1px solid #ddd;">{{title}}</td>
+                    <td style="padding: 5px; border-bottom: 1px solid #ddd;">{{price}}</td>
+                    <td style="padding: 5px; border-bottom: 1px solid #ddd;">{{description}}</td>
+                    <td style="padding: 5px; border-bottom: 1px solid #ddd;">{{code}}</td>
+                    <td style="padding: 5px; border-bottom: 1px solid #ddd;">{{stock}}</td>
+                    <td style="padding: 5px; border-bottom: 1px solid #ddd;"><button onclick="deleteProduct('{{id}}')" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">Eliminar</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulario para agregar producto -->
+    <form id="productForm" style="flex: 1; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+        <h3>Agregar Producto</h3>
+        <label for="title">Título:</label>
+        <input type="text" id="title" name="title" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+
+        <label for="description">Descripción:</label>
+        <input type="text" id="description" name="description" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+
+        <label for="code">Código:</label>
+        <input type="text" id="code" name="code" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+
+        <label for="price">Precio:</label>
+        <input type="number" id="price" name="price" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+
+        <label for="status">Estado:</label>
+        <input type="checkbox" id="status" name="status"><br><br>
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+
+        <label for="category">Categoría:</label>
+        <input type="text" id="category" name="category" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+
+        <label for="thumbnails">Imágenes (separadas por coma):</label>
+        <input type="text" id="thumbnails" name="thumbnails" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+
+        <button type="submit" style="width: 100%; padding: 10px; background-color: green; color: white; border: none; cursor: pointer;">Agregar Producto</button>
+    </form>
+</div>
+
+<script src="./socket.io/socket.io.js"></script>
+<script src="/js/products.js" defer></script>

@@ -1,0 +1,29 @@
+<h2 style="text-align: center;">Productos</h2>
+<hr>
+
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <div style="width: 80%; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; margin: auto;">
+            <thead>
+                <tr style="background-color: #f4f4f4;">
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 20%;">Título</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%;">Precio</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 30%;">Descripción</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 15%;">Código</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%;">Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each productos}}
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{title}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{price}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{description}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{code}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{stock}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

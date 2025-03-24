@@ -1,0 +1,54 @@
+[
+	{
+		"idCart": 1,
+		"productos": [
+			{
+				"idProducto": 1,
+				"quantity": 10
+			},
+			{
+				"idProducto": 2,
+				"quantity": 2
+			}
+		]
+	},
+	{
+		"idCart": 2,
+		"productos": [
+			{
+				"idProducto": 3,
+				"quantity": 1
+			},
+			{
+				"idProducto": 2,
+				"quantity": 5
+			}
+		]
+	},
+	{
+		"idCart": 3,
+		"productos": [
+			{
+				"idProducto": "2",
+				"quantity": 5
+			}
+		]
+	},
+	{
+		"idCart": 4,
+		"productos": []
+	},
+	{
+		"idCart": 5,
+		"productos": [
+			{
+				"idProducto": 2,
+				"quantity": 1
+			},
+			{
+				"idProducto": 8,
+				"quantity": 1
+			}
+		]
+	}
+]
