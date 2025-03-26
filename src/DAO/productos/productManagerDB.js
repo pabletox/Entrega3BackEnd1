@@ -13,7 +13,7 @@ class ProductManagerDB {
 
     static async getProduct(id) {
         try {
-            return await productModel.findOne({ id: id.toString() }).lean()
+            return await productModel.findById(id).lean()
         } catch (error) {
             console.error("Error al obtener producto: ", error.message)
             throw new Error("No se pudieron obtener los productos")
@@ -22,13 +22,6 @@ class ProductManagerDB {
 
     static async addProduct(product) {
         try {
-            let id = 1
-            const products = await productModel.find().lean()
-            console.log(products )
-            if(products.length > 0) {
-                id = Math.max(...products.map(d => d.id)) + 1
-            }
-            product.id = id
             return await productModel.create(product)
         } catch (error) {
             console.error("Error al agregar producto: ", error.message)
@@ -56,4 +49,4 @@ class ProductManagerDB {
 
 }
 
-module.exports = ProductManagerDB
+module.exports = {ProductManagerDB}

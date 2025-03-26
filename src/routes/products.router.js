@@ -1,7 +1,8 @@
 const Router = require('express').Router
-const ProductManagerDB = require('../DAO/productos/productManagerDB.js')
+const {ProductManagerDB} = require('../DAO/productos/productManagerDB.js')
 const {ProductManager} = require('../DAO/productos/productManager')
 const router=Router()
+const mongoose = require('mongoose')
 
 const productosManager = new ProductManager()
 
@@ -21,18 +22,13 @@ router.get('/', async (req, res) => {
 
 //get productos por id
 router.get('/:id', async (req, res) => {
-        const id = Number(req.params.id)
+    
+    const id = req.params.id
+    //validar id
+     if (!mongoose.isValidObjectId(id)){
+        return res.status(400).json({error: 'Id es requerido'})
+     }
 
-        if (!id){
-            res.status(400).json({error: 'Id es requerido'})
-            return
-        }
-
-        //validar si el id es un numero
-        if (isNaN(id) || id < 1 ||!Number.isInteger(id)){
-            res.status(400).json({error: 'Id debe ser Numero y positivo'})
-            return
-        }
 
         try{
             //const producto = await req.producManager.getProduct(id)
@@ -59,10 +55,9 @@ router.post('/', async (req, res) => {
         return res.status(400).json({error: 'Todos los campos son requeridos'})
     }
     try{
-        //const product = await req.producManager.getProducts()
-        //const product = await productosManager.getProducts()
+
         const products = await ProductManagerDB.getProducts()
-        const exist = products.find(p => p.title === producto.title)
+        const exist = products.find(p => p.code === producto.code)
         if(exist){
             
             return res.status(409).json({error: 'Producto ya existe'})
@@ -90,15 +85,19 @@ router.post('/', async (req, res) => {
 //put para actualizar producto
 router.put('/:id', async (req, res) => {
     const id = req.params.id
+    if (!mongoose.isValidObjectId(id)){
+        return res.status(400).json({error: 'Id es requerido'})
+    }
     const producto = req.body
 
     try{
         //const product = await req.producManager.getProduct(id)
-        const product = await productosManager.getProduct(id)
+        //const product = await productosManager.getProduct(id)
+        const product = await ProductManagerDB.getProduct(id)
         if(!product){
             res.status(404).json({error: 'No se encontro el producto'})
         }else{
-            const updatedProduct = await productosManager.updateProduct(id, producto)
+            const updatedProduct = await ProductManagerDB.updateProduct(id, producto)
             if(updatedProduct){
                 req.io.emit('ActualizacionProducto', id)
                 res.status(200).json({
