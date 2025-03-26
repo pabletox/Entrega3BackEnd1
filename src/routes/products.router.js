@@ -8,8 +8,12 @@ const productosManager = new ProductManager()
 
 //GET productos
 router.get('/', async (req, res) => {
+    let {page} = req.query
+    if(!page){
+        page = 1
+    }
     try{
-        const productos = await ProductManagerDB.getProducts()
+        const productos = await ProductManagerDB.getProducts(page)
       //  const productos = await productosManager.getProducts()
         res.setHeader('Content-Type','application/json');
         res.json(productos)

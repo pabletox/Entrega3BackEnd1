@@ -2,9 +2,10 @@ const {productModel} = require('../models/productModel.js')
 
 class ProductManagerDB {
 
-    static async getProducts() {
+    static async getProducts(page=1) {
         try {
-            return await productModel.find().lean()
+            //return await productModel.find().lean()
+            return await productModel.paginate({}, {page, limit: 10, lean: true})
         } catch (error) {
             console.error("Error al obtener productos: ", error.message)
             throw new Error("No se pudieron obtener los productos")

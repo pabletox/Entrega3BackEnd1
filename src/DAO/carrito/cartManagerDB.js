@@ -17,7 +17,7 @@ class CartManagerDB {
     static async getcart(cartId) {
     try{    
       
-      let cart = await cartModel.findById(cartId).lean()
+      let cart = await cartModel.findById(cartId).populate("products.product").lean()
       return cart || null;  // Devuelve null si no lo encuentra
 
     }catch(err){
