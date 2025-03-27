@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
     try {
       //const productos = await productosManager.getProducts()
       const productos = await ProductManagerDB.getProducts(page)
-      console.log(productos)
+      //console.log(productos)
       res.render('home', { productos:productos.docs })
     }
     catch (err) {

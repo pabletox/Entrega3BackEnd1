@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
         page = 1
     }
     try{
+        //console.log("page: ", page)
         const productos = await ProductManagerDB.getProducts(page)
       //  const productos = await productosManager.getProducts()
         res.setHeader('Content-Type','application/json');
