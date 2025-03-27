@@ -15,7 +15,7 @@ class CartManager {
 
         }catch(err){
             console.error("Error al obtener carritos: ", err.message)
-            throw new Error("No se pudieron obtener los carritos")
+            throw new Error("No se pudieron obtener  los carritos")
         }
         
     }  
