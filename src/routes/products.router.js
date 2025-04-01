@@ -8,15 +8,48 @@ const productosManager = new ProductManager()
 
 //GET productos
 router.get('/', async (req, res) => {
-    let {page} = req.query
+    let {page, limit, sort, categoria, estado} = req.query
+    let urlFirstPage = "?page=1"
+    let urlPrevPage = ""
+    let urlNextPage = ""
+    let urlLastPage = ""
+    let sortText = ""
     if(!page){
         page = 1
     }
+    if(sort === 'asc'){
+        sort = {price: 1}
+        sortText = 'asc'
+    }else if(sort === 'desc'){
+        sort = {price: -1}
+        sortText = 'desc'
+    }else{
+        sort = {}
+    }
+    // Construir el filtro de búsqueda
+    let queryFilter = {};
+    if (categoria) {
+        queryFilter.category = categoria;
+        hasCategoria = true
+    }
+
+    if (estado !== undefined) {
+      queryFilter.status = (estado === "true"); 
+      hasEstado = true
+    }
     try{
-        const productos = await ProductManagerDB.getProducts(page)
+        let {docs:productos,  totalPages, hasPrevPage, hasNextPage, prevPage, nextPage} = await ProductManagerDB.getProducts(page, limit, sort, queryFilter)
       //  const productos = await productosManager.getProducts()
         res.setHeader('Content-Type','application/json');
-        res.json(productos)
+        res.status(200).json({
+            productos,
+            totalPages,
+            hasPrevPage,
+            hasNextPage,
+            prevPage,
+            nextPage,
+            page
+        })
     }catch(err){
         console.error("Error en la API: ", err);
         res.status(500).json({ err: 'Error interno del servidor' })
@@ -40,7 +73,7 @@ router.get('/:id', async (req, res) => {
             const producto = await ProductManagerDB.getProduct(id)
 
             if(producto){
-                res.json(producto)
+                res.status(200).json(producto)
             }else{
                 res.status(404).json({error: 'Producto no encontrado'})
             }

@@ -22,16 +22,99 @@ router.get('/realtimeproducts', async (req, res) => {
   }
 })
 
-router.get('/', async (req, res) => {
-    let {page} = req.query
+router.get('/products', async (req, res) => {
+    let {page, limit, sort, categoria, estado} = req.query
+    let urlFirstPage = "?page=1"
+    let urlPrevPage = ""
+    let urlNextPage = ""
+    let urlLastPage = ""
+    let sortText = ""
+
     if(!page){
         page = 1
     }
+    if(sort === 'asc'){
+        sort = {price: 1}
+        sortText = 'asc'
+    }else if(sort === 'desc'){
+        sort = {price: -1}
+        sortText = 'desc'
+    }else{
+        sort = {}
+    }
+    // Construir el filtro de búsqueda
+    let queryFilter = {};
+    if (categoria) {
+        queryFilter.category = categoria;
+        hasCategoria = true
+    }
+
+    if (estado !== undefined) {
+      queryFilter.status = (estado === "true"); 
+      hasEstado = true
+    }
+
     try {
       //const productos = await productosManager.getProducts()
-      const productos = await ProductManagerDB.getProducts(page)
-      console.log(productos)
-      res.render('home', { productos:productos.docs })
+      let {docs:productos,  totalPages, hasPrevPage, hasNextPage, prevPage, nextPage} = await ProductManagerDB.getProducts(page, limit, sort, queryFilter)
+      let showLastPage = true
+      if (totalPages == page) {
+        showLastPage = false
+      }
+      if (hasPrevPage) {
+        urlPrevPage = `?page=${prevPage}`
+      } else{
+        urlPrevPage = `?page=${page}`
+      }
+      if (hasNextPage) {
+        urlNextPage = `?page=${nextPage}`
+      } else{
+        urlNextPage = `?page=${totalPages}`
+      }
+      urlLastPage = `?page=${totalPages}`
+      if(limit){
+        urlFirstPage += `&limit=${limit}`
+        urlPrevPage += `&limit=${limit}`
+        urlNextPage += `&limit=${limit}`
+        urlLastPage += `&limit=${limit}`
+      }
+      if(sort){
+        urlFirstPage += `&sort=${sortText}`
+        urlPrevPage += `&sort=${sortText}`
+        urlNextPage += `&sort=${sortText}`
+        urlLastPage += `&sort=${sortText}`
+      }
+      if(categoria){
+        urlFirstPage += `&categoria=${categoria}`
+        urlPrevPage += `&categoria=${categoria}`
+        urlNextPage += `&categoria=${categoria}`
+        urlLastPage += `&categoria=${categoria}`
+      }
+      if(estado){
+        urlFirstPage += `&estado=${estado}`
+        urlPrevPage += `&estado=${estado}`
+        urlNextPage += `&estado=${estado}`
+        urlLastPage += `&estado=${estado}`
+      }
+      console.log(urlPrevPage)
+      
+      
+    
+
+      res.render('home', { productos
+                          , totalPages
+                          , hasPrevPage
+                          , hasNextPage
+                          , prevPage
+                          , nextPage 
+                          , limit 
+                          , sort
+                          , showLastPage
+                          , urlPrevPage
+                          , urlNextPage
+                          , urlFirstPage
+                          , urlLastPage
+                          })
     }
     catch (err) {
       console.error("Error en la API: ", err);
