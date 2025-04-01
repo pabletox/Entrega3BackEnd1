@@ -96,7 +96,7 @@ router.get('/products', async (req, res) => {
         urlNextPage += `&estado=${estado}`
         urlLastPage += `&estado=${estado}`
       }
-      console.log(urlPrevPage)
+      //console.log(urlPrevPage)
       
       
     
