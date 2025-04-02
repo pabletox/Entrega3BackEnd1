@@ -23,7 +23,18 @@
                     <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{stock}}</td>
                 </tr>
                 {{/each}}
+                
             </tbody>
         </table>
+        <a href="/products{{urlFirstPage}}">Pág. 1</a>
+        {{#if prevPage}}
+            <a href="/products{{urlPrevPage}}">Pág. Anterior</a>
+        {{/if}}
+        {{#if nextPage}}
+            <a href="/products{{urlNextPage}}"> Pág. Siguiente</a>
+        {{/if}}
+        {{#if showLastPage}}
+        <a href="/products{{urlLastPage}}">Ultima. Pág.({{totalPages}})</a>
+        {{/if}}
     </div>
 </div>

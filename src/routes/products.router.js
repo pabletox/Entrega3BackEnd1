@@ -9,10 +9,6 @@ const productosManager = new ProductManager()
 //GET productos
 router.get('/', async (req, res) => {
     let {page, limit, sort, categoria, estado} = req.query
-    let urlFirstPage = "?page=1"
-    let urlPrevPage = ""
-    let urlNextPage = ""
-    let urlLastPage = ""
     let sortText = ""
     if(!page){
         page = 1

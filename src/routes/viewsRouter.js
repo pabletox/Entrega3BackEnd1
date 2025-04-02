@@ -22,6 +22,17 @@ router.get('/realtimeproducts', async (req, res) => {
   }
 })
 
+router.get('/', async (req, res) => {
+  try {
+    const productos = await productosManager.getProducts()
+    res.render('home', { productos })
+  }
+  catch (err) {
+    console.error("Error en la API: ", err);
+    res.status(500).json({ err: 'Error interno del servidor' })
+  }
+})
+
 router.get('/products', async (req, res) => {
     let {page, limit, sort, categoria, estado} = req.query
     let urlFirstPage = "?page=1"
@@ -101,7 +112,7 @@ router.get('/products', async (req, res) => {
       
     
 
-      res.render('home', { productos
+      res.render('index', { productos
                           , totalPages
                           , hasPrevPage
                           , hasNextPage
