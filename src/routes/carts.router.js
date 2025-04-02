@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
 })
 
 //post para agregar producto al carrito
-router.post('/:cid/products/:pid', async (req, res) => {
+router.post('/:cid/product/:pid', async (req, res) => {
 
     const cartId = req.params.cid
     if (!mongoose.isValidObjectId(cartId)){
@@ -92,7 +92,7 @@ router.post('/:cid/products/:pid', async (req, res) => {
 
 
 
-router.delete('/:cid/products/:pid', async (req, res) => {
+router.delete('/:cid/product/:pid', async (req, res) => {
 
     const cartId = req.params.cid
     if (!mongoose.isValidObjectId(cartId)){
@@ -167,6 +167,106 @@ router.delete('/:cid',async (req, res) => {
 
 })
 
+//actualiza el carrito con un array de productos
+router.put('/:cid', async (req, res) => {
+    const cartId = req.params.cid
+    if (!mongoose.isValidObjectId(cartId)){
+        return res.status(400).json({error: 'Id de cart no valido'})
+    }
+
+    //revisar si carrito existe
+    //const cart = await req.cartManager.getcart(cartId)
+    const cart = await CartManagerDB.getcart(cartId)
+    if(!cart){
+        return res.status(404).json({error: 'Carrito no encontrado'})
+        
+    }
+    
+    const products = req.body.products
+    if(!products || products.length === 0){
+        return res.status(400).json({error: 'No se enviaron productos'})
+        
+    }
+
+    //revisar si los productos existen
+    for (const product of products) {
+        const productId = product.product
+        if (!mongoose.isValidObjectId(productId)){
+            return res.status(400).json({error: `Id ${productId} de producto no valido`})
+        }
+
+        const productDB = await ProductManagerDB.getProduct(productId)
+        if(!productDB){
+            return res.status(404).json({error: `Id ${productId} de Producto no encontrado`})
+            
+        }
+    }
+
+    await CartManagerDB.updateCart(cartId, products)
+
+    const updatedCart = await CartManagerDB.getcart(cartId)
+    if(!updatedCart){
+        res.status(400).json({error: 'Productos no actualizados del carrito'})
+    }else{
+        req.io.emit('ProductoCarrito', updatedCart)
+        res.status(201).json({message: 'Productos actualizados del carrito'})
+    }
+
+})
+
+//actualiza la cantidad de un producto en el carrito
+router.put('/:cid/product/:pid', async (req, res) => {
+    const cartId = req.params.cid
+    if (!mongoose.isValidObjectId(cartId)){
+        return res.status(400).json({error: 'Id de cart no valido'})
+    }
+
+    //revisar si carrito existe
+    //const cart = await req.cartManager.getcart(cartId)
+    const cart = await CartManagerDB.getcart(cartId)
+    if(!cart){
+        return res.status(404).json({error: 'Carrito no encontrado'})
+        
+    }
+    //revisar si producto existe
+    const productId = req.params.pid
+    if (!mongoose.isValidObjectId(productId)){
+        return res.status(400).json({error: 'Id de producto no valido'})
+    }
+
+    const product = await ProductManagerDB.getProduct(productId)
+    if(!product){
+        return res.status(404).json({error: 'Producto no encontrado'})
+        
+    }
+
+    //verificar si el producto esta en el carrito
+    const productInCart = cart.products.find(p => p.product._id.toString() === productId.toString())
+    if(!productInCart){
+
+        return res.status(404).json({error: 'no existe el producto en el carrito'})
+        
+    }
+    
+    const qty = req.body.quantity
+    if(!qty || qty <= 0){
+        return res.status(400).json({error: 'No se envio cantidad valida'})
+        
+    }
+
+    
+    await CartManagerDB.updateQuantityProductCart(cartId, productId, qty)
+
+    const updatedCart = await CartManagerDB.getcart(cartId)
+    if(!updatedCart){
+        res.status(400).json({error: 'Productos no actualizados del carrito'})
+    }else{
+        req.io.emit('ProductoCarrito', updatedCart)
+        res.status(201).json({message: 'Cantidad de productos actualizada del carrito'})
+    }
+
+
+})
 
 
 module.exports = router

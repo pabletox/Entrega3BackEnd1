@@ -139,6 +139,35 @@ class CartManagerDB {
         
     }
 
+    static async updateCart(cartId, products) {
+        try {
+            let cart = await cartModel.findById(cartId)
+            cart.products = products // Actualiza todos los productos
+            await cart.save(); 
+            return cart;
+        } catch (err) {
+            console.error("Error al actualizar el carrito: ", err.message)
+        }
+
+    }
+
+    static async updateQuantityProductCart(cartId, productId, qty) {
+
+        try {
+            let cart = await cartModel.findById(cartId)
+            // Buscar si el producto ya está en el carrito
+            const productIndex = cart.products.findIndex(p => p.product._id.toString()=== productId.toString());
+            cart.products[productIndex].quantity = qty; // Actualiza la cantidad del producto
+
+            await cart.save(); 
+            return cart;
+
+            
+        } catch (err) {
+            console.error("Error al actualizar la cantidad del producto del carrito: ", err.message)
+        }
+    }
+
 
 } 
 
