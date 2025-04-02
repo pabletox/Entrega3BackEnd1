@@ -103,7 +103,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     //const cart = await req.cartManager.getcart(cartId)
     const cart = await CartManagerDB.getcart(cartId)
     if(!cart){
-        return res.status(204).json({error: 'Carrito no encontrado post'})
+        return res.status(404).json({error: 'Carrito no encontrado'})
         
     }
     //revisar si producto existe
@@ -114,20 +114,54 @@ router.delete('/:cid/products/:pid', async (req, res) => {
 
     const product = await ProductManagerDB.getProduct(productId)
     if(!product){
-        return res.status(204).json({error: 'Producto no encontrado'})
+        return res.status(404).json({error: 'Producto no encontrado'})
         
     }
-    //resta producto al carrito
-    await CartManagerDB.subtractProductToCart(cartId, productId)
+
+    //verificar si el producto esta en el carrito
+    const productInCart = cart.products.find(p => p.product._id.toString() === productId.toString())
+    if(!productInCart){
+
+        return res.status(404).json({error: 'no existe el producto en el carrito'})
+        
+    }
+    //eliminar producto del carrito
+    await CartManagerDB.deleteProductToCart(cartId, productId)
 
     //revisar si se agrego el producto
     const updatedCart = await CartManagerDB.getcart(cartId)
-   // console.log(updatedCart)
     if(!updatedCart){
-        res.status(204).json({error: 'Producto no restado al carrito'})
+        res.status(400).json({error: 'Producto no eliminado al carrito'})
     }else{
         req.io.emit('ProductoCarrito', updatedCart)
-        res.status(201).json({message: 'Producto restado al carrito'})
+        res.status(201).json({message: 'Producto eliminado al carrito'})
+    }
+
+
+})
+
+router.delete('/:cid',async (req, res) => {
+    const cartId = req.params.cid
+    if (!mongoose.isValidObjectId(cartId)){
+        return res.status(400).json({error: 'Id de cart no valido'})
+    }
+
+    //revisar si carrito existe
+    //const cart = await req.cartManager.getcart(cartId)
+    const cart = await CartManagerDB.getcart(cartId)
+    if(!cart){
+        return res.status(404).json({error: 'Carrito no encontrado'})
+        
+    }
+    
+
+    await CartManagerDB.deleteAllProducts(cartId)
+    const updatedCart = await CartManagerDB.getcart(cartId)
+    if(!updatedCart){
+        res.status(400).json({error: 'Productos no eliminados del carrito'})
+    }else{
+        req.io.emit('ProductoCarrito', updatedCart)
+        res.status(201).json({message: 'Productos eliminados del carrito'})
     }
 
 

@@ -111,6 +111,34 @@ class CartManagerDB {
         
     }
 
+    static async deleteProductToCart(cartId, productId) {
+        try {
+            let cart = await cartModel.findById(cartId)
+                        // Buscar si el producto ya está en el carrito
+            const productIndex = cart.products.findIndex(p => p.product._id.toString()=== productId.toString());
+            cart.products.splice(productIndex, 1); // Elimina el producto
+
+            await cart.save(); 
+            return cart;
+
+            
+        } catch (err) {
+            console.error("Error al eliminar el producto del carrito: ", err.message)
+        }
+        
+    }
+    static async deleteAllProducts(cartId) {
+        try {
+            let cart = await cartModel.findById(cartId)
+            cart.products = [] // Elimina todos los productos
+            await cart.save(); 
+            return cart;
+        } catch (err) {
+            console.error("Error al eliminar todos los productos del carrito: ", err.message)
+        }
+        
+    }
+
 
 } 
 
