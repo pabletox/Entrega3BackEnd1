@@ -8,8 +8,11 @@ const productosManager = new ProductManager()
 
 //GET productos
 router.get('/', async (req, res) => {
-    let {page, limit, sort, categoria, estado} = req.query
+    let {page, limit, sort, category, status} = req.query
     let sortText = ""
+    let urlBase = req.protocol + '://' + req.get('host') 
+    let urlPrevPage = urlBase
+    let urlNextPage = urlBase
     if(!page){
         page = 1
     }
@@ -19,23 +22,52 @@ router.get('/', async (req, res) => {
     }else if(sort === 'desc'){
         sort = {price: -1}
         sortText = 'desc'
-    }else{
-        sort = {}
     }
     // Construir el filtro de búsqueda
     let queryFilter = {};
-    if (categoria) {
-        queryFilter.category = categoria;
-        hasCategoria = true
+    if (category) {
+        queryFilter.category = category;
     }
 
-    if (estado !== undefined) {
-      queryFilter.status = (estado === "true"); 
-      hasEstado = true
+    if (status !== undefined) {
+      queryFilter.status = (status === "true"); 
     }
     try{
         let {docs:productos,  totalPages, hasPrevPage, hasNextPage, prevPage, nextPage} = await ProductManagerDB.getProducts(page, limit, sort, queryFilter)
       //  const productos = await productosManager.getProducts()
+
+      if (hasPrevPage) {
+        urlPrevPage += `?page=${prevPage}`
+      } else{
+        urlPrevPage = null
+      }
+      if (hasNextPage) {
+        urlNextPage += `?page=${nextPage}`
+      } else{
+        urlNextPage = null
+      }
+      if(limit){
+        urlPrevPage += `&limit=${limit}`
+        urlNextPage += `&limit=${limit}`
+      }
+      if(sort){
+        urlPrevPage += `&sort=${sortText}`
+        urlNextPage += `&sort=${sortText}`
+      }
+      if(category){
+        urlPrevPage += `&category=${category}`
+        urlNextPage += `&category=${category}`
+      }
+      if(status){
+
+        urlPrevPage += `&status=${status}`
+        urlNextPage += `&status=${status}`
+      }
+
+      if (!productos || productos.length === 0) {
+        return res.status(404).json({error: 'No se encontraron productos'})
+      }
+        
         res.setHeader('Content-Type','application/json');
         res.status(200).json({
             productos,
@@ -44,7 +76,9 @@ router.get('/', async (req, res) => {
             hasNextPage,
             prevPage,
             nextPage,
-            page
+            page, 
+            urlPrevPage,
+            urlNextPage
         })
     }catch(err){
         console.error("Error en la API: ", err);

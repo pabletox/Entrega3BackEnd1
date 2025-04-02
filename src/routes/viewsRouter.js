@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/products', async (req, res) => {
-    let {page, limit, sort, categoria, estado} = req.query
+    let {page, limit, sort, category, status} = req.query
     let urlFirstPage = "?page=1"
     let urlPrevPage = ""
     let urlNextPage = ""
@@ -55,14 +55,12 @@ router.get('/products', async (req, res) => {
     }
     // Construir el filtro de búsqueda
     let queryFilter = {};
-    if (categoria) {
-        queryFilter.category = categoria;
-        hasCategoria = true
+    if (category) {
+        queryFilter.category = category;
     }
 
-    if (estado !== undefined) {
-      queryFilter.status = (estado === "true"); 
-      hasEstado = true
+    if (status !== undefined) {
+      queryFilter.status = (status === "true"); 
     }
 
     try {
@@ -95,17 +93,17 @@ router.get('/products', async (req, res) => {
         urlNextPage += `&sort=${sortText}`
         urlLastPage += `&sort=${sortText}`
       }
-      if(categoria){
-        urlFirstPage += `&categoria=${categoria}`
-        urlPrevPage += `&categoria=${categoria}`
-        urlNextPage += `&categoria=${categoria}`
-        urlLastPage += `&categoria=${categoria}`
+      if(category){
+        urlFirstPage += `&category=${category}`
+        urlPrevPage += `&category=${category}`
+        urlNextPage += `&category=${category}`
+        urlLastPage += `&category=${category}`
       }
-      if(estado){
-        urlFirstPage += `&estado=${estado}`
-        urlPrevPage += `&estado=${estado}`
-        urlNextPage += `&estado=${estado}`
-        urlLastPage += `&estado=${estado}`
+      if(status){
+        urlFirstPage += `&status=${status}`
+        urlPrevPage += `&status=${status}`
+        urlNextPage += `&status=${status}`
+        urlLastPage += `&status=${status}`
       }
       //console.log(urlPrevPage)
       
