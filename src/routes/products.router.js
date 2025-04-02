@@ -10,7 +10,7 @@ const productosManager = new ProductManager()
 router.get('/', async (req, res) => {
     let {page, limit, sort, category, status} = req.query
     let sortText = ""
-    let urlBase = req.protocol + '://' + req.get('host') 
+    let urlBase = `${req.protocol}://${req.get('host')}/api/products` 
     let urlPrevPage = urlBase
     let urlNextPage = urlBase
     if(!page){
@@ -38,14 +38,11 @@ router.get('/', async (req, res) => {
 
       if (hasPrevPage) {
         urlPrevPage += `?page=${prevPage}`
-      } else{
-        urlPrevPage = null
-      }
+      } 
+      
       if (hasNextPage) {
         urlNextPage += `?page=${nextPage}`
-      } else{
-        urlNextPage = null
-      }
+      } 
       if(limit){
         urlPrevPage += `&limit=${limit}`
         urlNextPage += `&limit=${limit}`
@@ -62,6 +59,14 @@ router.get('/', async (req, res) => {
 
         urlPrevPage += `&status=${status}`
         urlNextPage += `&status=${status}`
+      }
+
+      if(!hasPrevPage){
+        urlPrevPage = null
+      }
+
+      if(!hasNextPage){
+        urlNextPage = null
       }
 
       if (!productos || productos.length === 0) {
@@ -118,13 +123,12 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const producto = req.body
     //ver si existe el producto por title
-    if(!producto.title || !producto.price || !producto.thumbnails||!producto.code||!producto.description||!producto.stock||!producto.category||!producto.status){
+    if(!producto.title || !producto.price || !producto.code||!producto.description||!producto.stock||!producto.category||!producto.status){
         return res.status(400).json({error: 'Todos los campos son requeridos'})
     }
     try{
 
-        const products = await ProductManagerDB.getProducts()
-        const exist = products.find(p => p.code === producto.code)
+        const exist = await ProductManagerDB.getProductByCode(producto.code)
         if(exist){
             
             return res.status(409).json({error: 'Producto ya existe'})

@@ -20,6 +20,15 @@ class ProductManagerDB {
             throw new Error("No se pudieron obtener los productos")
         }
     }
+    static async getProductByCode(code) {
+        try{
+            return await productModel.findOne({code: code}).lean()
+        }catch (error) {
+            console.error("Error al obtener producto por code: ", error.message)
+            throw new Error("No se pudo obtener el producto")
+        }
+    
+    }
 
     static async addProduct(product) {
         try {
