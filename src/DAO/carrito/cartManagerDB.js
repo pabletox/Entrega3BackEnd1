@@ -56,11 +56,11 @@ class CartManagerDB {
             const productIndex = cart.products.findIndex(p => p.product.toString()=== productId.toString());
 
             if(productIndex !== -1){
-                console.log('producto existe')
+                //console.log('producto existe')
                 cart.products[productIndex].quantity += qty;
             }
             else{
-                console.log('producto No existe')
+                //console.log('producto No existe')
                 cart.products.push({product: productId, quantity: qty});
             }
 

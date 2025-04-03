@@ -1,7 +1,10 @@
 const Router = require('express').Router
 const {ProductManager} = require('../DAO/productos/productManager')
 const {ProductManagerDB} = require('../DAO/productos/productManagerDB')
+const {CartManagerDB} = require('../DAO/carrito/cartManagerDB')
 const router = Router()
+const mongoose = require('mongoose')
+const { cartModel } = require('../DAO/models/carModel')
 
 const productosManager = new ProductManager()
 
@@ -130,5 +133,48 @@ router.get('/products', async (req, res) => {
       res.status(500).json({ err: 'Error interno del servidor' })
     }
   })
+
+
+
+router.get('/carts/:cid', async (req,res)=>{
+    let cid = req.params.cid
+
+     if (!mongoose.isValidObjectId(cid)){
+        return res.status(400).json({error: 'Id no valido'})
+      }
+  
+  
+  
+      try{
+          const cart = await CartManagerDB.getcart(cid)
+          // Extraer los productos con sus características
+        const products = cart.products.map(productArray => ({
+                                            title: productArray.product.title,
+                                            price: productArray.product.price,
+                                            code: productArray.product.code,
+                                            description: productArray.product.description,
+                                            quantity: productArray.quantity,
+                                            stock: productArray.product.stock,
+                                            totalProduct: productArray.product.price * productArray.quantity,
+                                        }));
+         // console.log(products)
+         let totalFinal = 0
+         products.forEach(product => {
+            totalFinal += product.totalProduct
+         })
+  
+          if(cart){
+            res.render('cartview', {cid, products, totalFinal})
+          }else{
+              res.status(404).json({error: 'Carrito no encontrado get'})
+          }
+      }catch(err){
+          console.error("Error en la API: ", err);
+          res.status(500).json({ err: 'Error interno del servidor' })
+      }
+
+  
+
+})
 
 module.exports = router

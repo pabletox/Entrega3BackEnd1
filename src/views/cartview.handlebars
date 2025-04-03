@@ -1,0 +1,42 @@
+<h2 style="text-align: center;">Cart iD: {{cid}}</h2>
+<hr>
+
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <div style="width: 80%; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; margin: auto;">
+            <thead>
+                <tr style="background-color: #f4f4f4;">
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 20%; text-align: center;">Título</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%; text-align: center;">Precio</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 30%; text-align: center;">Descripción</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 15%; text-align: center;">Código</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%; text-align: center;">Stock</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%; text-align: center;">Cantidad</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%; text-align: center;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{title}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{price}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{description}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{code}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{stock}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{quantity}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{totalProduct}}</td>
+                </tr>
+                {{/each}}
+                <tr style="background-color: #f4f4f4;">
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 20%;"></th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%;"></th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 30%;"></th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 15%;"></th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%;"></th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%; text-align: center;">Total</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%;">{{totalFinal}}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

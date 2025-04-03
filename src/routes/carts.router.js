@@ -13,16 +13,16 @@ const productosManager = new ProductManager()
 //get para carrito por id
 router.get('/:cid', async (req, res) => {
 
-    const id = req.params.cid
+    const cid = req.params.cid
     //validar id
-    if (!mongoose.isValidObjectId(id)){
+    if (!mongoose.isValidObjectId(cid)){
     return res.status(400).json({error: 'Id no valido'})
     }
 
 
 
     try{
-        const cart = await CartManagerDB.getcart(id)
+        const cart = await CartManagerDB.getcart(cid)
 
         if(cart){
             res.json(cart)
