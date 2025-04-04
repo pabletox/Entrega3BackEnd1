@@ -3,6 +3,8 @@
 
 <div style="display: flex; justify-content: center; margin-top: 20px;">
     <div style="width: 80%; overflow-x: auto;">
+        <label>ID Carrito: </label>
+        <input type="text" id="search" placeholder="Ingrese Carrito" style="width: 20%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px;" onkeyup="filterTable()">
         <table style="width: 100%; border-collapse: collapse; text-align: left; margin: auto;">
             <thead>
                 <tr style="background-color: #f4f4f4;">
@@ -11,6 +13,7 @@
                     <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 30%;">Descripción</th>
                     <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 15%;">Código</th>
                     <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 10%;">Stock</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; width: 15%;">Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,20 +24,28 @@
                     <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{description}}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{code}}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">{{stock}}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">
+                        <button onclick="addToCart('{{_id}}')" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">Agregar</button>
+                    </td>
+                    
                 </tr>
                 {{/each}}
                 
             </tbody>
         </table>
-        <a href="/products{{urlFirstPage}}">Pág. 1</a>
+        {{#if showFirstPage}}
+        <a href="/products{{urlFirstPage}}">Pág. 1</a>&nbsp;&nbsp;
+        {{/if}}
         {{#if prevPage}}
-            <a href="/products{{urlPrevPage}}">Pág. Anterior</a>
+            <a href="/products{{urlPrevPage}}">Pág. Anterior</a>&nbsp;&nbsp;
         {{/if}}
         {{#if nextPage}}
-            <a href="/products{{urlNextPage}}"> Pág. Siguiente</a>
+            <a href="/products{{urlNextPage}}"> Pág. Siguiente</a>&nbsp;&nbsp;
         {{/if}}
         {{#if showLastPage}}
         <a href="/products{{urlLastPage}}">Ultima. Pág.({{totalPages}})</a>
         {{/if}}
     </div>
 </div>
+
+<script src="/js/cartProducts.js" defer></script>

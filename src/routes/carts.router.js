@@ -25,9 +25,9 @@ router.get('/:cid', async (req, res) => {
         const cart = await CartManagerDB.getcart(cid)
 
         if(cart){
-            res.json(cart)
+            res.status(200).json(cart)
         }else{
-            res.status(404).json({error: 'Carrito no encontrado get'})
+            res.status(404).json({error: 'Carrito no encontrado'})
         }
     }catch(err){
         console.error("Error en la API: ", err);
@@ -71,7 +71,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
 
     const product = await ProductManagerDB.getProduct(productId)
     if(!product){
-        return res.status(204).json({error: 'Producto no encontrado'})
+        return res.status(404).json({error: 'Producto no encontrado'})
         
     }
     //agregar producto al carrito
@@ -134,7 +134,7 @@ router.delete('/:cid/product/:pid', async (req, res) => {
         res.status(400).json({error: 'Producto no eliminado al carrito'})
     }else{
         req.io.emit('ProductoCarrito', updatedCart)
-        res.status(201).json({message: 'Producto eliminado al carrito'})
+        res.status(200).json({message: 'Producto eliminado al carrito'})
     }
 
 
@@ -161,7 +161,7 @@ router.delete('/:cid',async (req, res) => {
         res.status(400).json({error: 'Productos no eliminados del carrito'})
     }else{
         req.io.emit('ProductoCarrito', updatedCart)
-        res.status(201).json({message: 'Productos eliminados del carrito'})
+        res.status(200).json({message: 'Productos eliminados del carrito'})
     }
 
 

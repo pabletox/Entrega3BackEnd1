@@ -199,6 +199,7 @@ router.delete('/:id', async (req, res) => {
         }
 
         //const deletedProduct = await productosManager.deleteProduct(id)
+        console.log(id)
         const deletedProduct = await ProductManagerDB.deleteProduct(id)
         req.io.emit('ProductoEliminado', id); // Emitir evento para Socket.io
         res.status(200).json({message:'Producto Eliminado'})

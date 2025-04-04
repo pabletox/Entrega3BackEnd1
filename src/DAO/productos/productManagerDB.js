@@ -50,7 +50,7 @@ class ProductManagerDB {
 
     static async deleteProduct(id) {
         try {
-            return await productModel.deleteOne({id: id.toString()})   
+            return await productModel.deleteOne({_id: id.toString()})   
         }catch (error) {
             console.error("Error al eliminar producto: ", error.message)
             throw new Error("No se pudo eliminar el producto")

@@ -46,8 +46,7 @@ class CartManagerDB {
         try {
             
             let cart = await cartModel.findById(cartId)
-            console.log('previa clg')
-            console.log(cart)
+
             if(!cart){
                 return console.error("Carrito no encontrado addProductToCart")
             }
@@ -79,17 +78,15 @@ class CartManagerDB {
         try {
             
             let cart = await cartModel.findById(cartId)
-            console.log('previa clg')
-            console.log(cart)
             if(!cart){
-                return console.error("Carrito no encontrado addProductToCart")
+                return console.error("Carrito no encontrado")
             }
 
             // Buscar si el producto ya está en el carrito
             const productIndex = cart.products.findIndex(p => p.product.toString()=== productId.toString());
 
             if(productIndex !== -1){
-                console.log('producto existe')
+                //console.log('producto existe')
                 cart.products[productIndex].quantity -= qty;
 
                 // Si la cantidad es 0 o menor, eliminar el producto del carrito

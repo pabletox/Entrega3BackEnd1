@@ -53,8 +53,6 @@ router.get('/products', async (req, res) => {
     }else if(sort === 'desc'){
         sort = {price: -1}
         sortText = 'desc'
-    }else{
-        sort = {}
     }
     // Construir el filtro de búsqueda
     let queryFilter = {};
@@ -109,9 +107,11 @@ router.get('/products', async (req, res) => {
         urlLastPage += `&status=${status}`
       }
       //console.log(urlPrevPage)
+      let showFirstPage = true
+      if (page == 1) {
+        showFirstPage = false
+      }
       
-      
-    
 
       res.render('index', { productos
                           , totalPages
@@ -126,6 +126,7 @@ router.get('/products', async (req, res) => {
                           , urlNextPage
                           , urlFirstPage
                           , urlLastPage
+                          , showFirstPage
                           })
     }
     catch (err) {
