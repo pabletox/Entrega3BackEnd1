@@ -41,7 +41,7 @@ router.get('/products', async (req, res) => {
     let urlFirstPage = "?page=1"
     let urlPrevPage = ""
     let urlNextPage = ""
-    let urlLastPage = ""
+    let urlLastPage = "" 
     let sortText = ""
 
     if(!page){
