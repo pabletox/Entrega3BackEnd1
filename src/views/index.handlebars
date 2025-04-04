@@ -1,10 +1,12 @@
+<h3 style="text-align: right;">Página {{page}}</h3>
 <h2 style="text-align: center;">Productos</h2>
 <hr>
 
 <div style="display: flex; justify-content: center; margin-top: 20px;">
     <div style="width: 80%; overflow-x: auto;">
         <label>ID Carrito: </label>
-        <input type="text" id="search" placeholder="Ingrese Carrito" style="width: 20%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px;" onkeyup="filterTable()">
+        <input type="text" id="search" placeholder="Ingrese Carrito" style="width: 20%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px;" onkeyup="updateCartLink()">
+        <a id="cartLink" href="http://localhost:8080/carts/" target="_blank" style="padding: 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">Ir al carrito</a>
         <table style="width: 100%; border-collapse: collapse; text-align: left; margin: auto;">
             <thead>
                 <tr style="background-color: #f4f4f4;">

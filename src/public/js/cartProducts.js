@@ -24,3 +24,15 @@ async function addToCart(productId) {
         alert("No se pudo agregar el producto al carrito");
     }
 }
+
+function updateCartLink() {
+    const input = document.getElementById('search');
+    const link = document.getElementById('cartLink');
+    const cartId = input.value.trim();
+
+    if (cartId) {
+      link.href = `http://localhost:8080/carts/${cartId}`;
+    } else {
+      link.href = `http://localhost:8080/carts/`;
+    }
+  }

@@ -127,6 +127,7 @@ router.get('/products', async (req, res) => {
                           , urlFirstPage
                           , urlLastPage
                           , showFirstPage
+                          , page
                           })
     }
     catch (err) {
